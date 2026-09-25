@@ -1,0 +1,62 @@
+{
+	"name": "df_productos_menu",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "productos_menu",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "productos_menu_sql",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          producto_id as string,",
+				"          nombre_producto as string,",
+				"          categoria as string,",
+				"          precio_lista as string,",
+				"          costo_estimado as string,",
+				"          disponible as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(nombre_producto = initCap(lower(trim(nombre_producto))),",
+				"          categoria = initCap(lower(trim(categoria))),",
+				"          disponible = upper(trim(disponible))) ~> derivedColumn1",
+				"derivedColumn1 split(!isNull(producto_id) && trim(producto_id) != '' && !isNull(nombre_producto) && trim(nombre_producto) != '' && !isNull(precio_lista),",
+				"     disjoint: false) ~> split1@(valido, rechazado)",
+				"split1@valido sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

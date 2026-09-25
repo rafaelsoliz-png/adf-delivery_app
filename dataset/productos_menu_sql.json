@@ -1,0 +1,16 @@
+{
+	"name": "productos_menu_sql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sql_deliveryapp",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "delivery_app",
+			"table": "productos_menu"
+		}
+	}
+}
