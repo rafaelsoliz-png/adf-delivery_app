@@ -1,5 +1,5 @@
 {
-	"name": "clientes_sql",
+	"name": "restaurantes_sql",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "sql_deliveryapp",
@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "delivery_app",
-			"table": "clientes"
+			"table": "restaurantes"
 		}
 	}
 }
