@@ -1,0 +1,61 @@
+{
+	"name": "df_promociones",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "promociones",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "promociones_sql",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          promocion_id as string,",
+				"          nombre_promocion as string,",
+				"          fecha_inicio as string,",
+				"          fecha_fin as string,",
+				"          porcentaje_descuento as string,",
+				"          canal_aplicable as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(nombre_promocion = initCap(lower(trim(nombre_promocion))),",
+				"          canal_aplicable = initCap(lower(trim(canal_aplicable)))) ~> derivedColumn1",
+				"derivedColumn1 split(!isNull(promocion_id) && trim(promocion_id) != '' && !isNull(nombre_promocion) && trim(nombre_promocion) != '',",
+				"     disjoint: false) ~> split1@(valido, rechazado)",
+				"split1@valido sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

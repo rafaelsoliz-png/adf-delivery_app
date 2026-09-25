@@ -1,0 +1,48 @@
+{
+	"name": "promociones",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_deliveryapp",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "promociones.csv",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "promocion_id",
+				"type": "String"
+			},
+			{
+				"name": "nombre_promocion",
+				"type": "String"
+			},
+			{
+				"name": "fecha_inicio",
+				"type": "String"
+			},
+			{
+				"name": "fecha_fin",
+				"type": "String"
+			},
+			{
+				"name": "porcentaje_descuento",
+				"type": "String"
+			},
+			{
+				"name": "canal_aplicable",
+				"type": "String"
+			}
+		]
+	}
+}
